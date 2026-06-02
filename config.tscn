@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://ct5xc6xnlo46y"]
+
+[ext_resource type="Script" uid="uid://bp2vecf40cfcy" path="res://Config.cs" id="1_jitdt"]
+[ext_resource type="Texture2D" uid="uid://kefioheje50l" path="res://spritestemp/download.png" id="2_q6plf"]
+[ext_resource type="Texture2D" uid="uid://i1fe80e7dank" path="res://spritestemp/SAIR.png" id="3_j0524"]
+
+[node name="Control" type="Control" unique_id=1968342495]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_jitdt")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1170597701]
+layout_mode = 0
+offset_right = 1153.0
+offset_bottom = 650.0
+texture = ExtResource("2_q6plf")
+
+[node name="voltar_btn" type="TextureButton" parent="TextureRect" unique_id=2126857796]
+layout_mode = 0
+offset_left = 519.0
+offset_top = 280.0
+offset_right = 598.0
+offset_bottom = 320.0
+texture_normal = ExtResource("3_j0524")
