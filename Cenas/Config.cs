@@ -8,7 +8,7 @@ public partial class Config : Control
 		var voltar = GetNode<TextureButton>("TextureRect/voltar_btn");
 		voltar.Pressed += () =>
 		{
-			GetTree().ChangeSceneToFile("res://telaInicial.tscn");
+			GetTree().ChangeSceneToFile("res://Cenas/telaInicial.tscn");
 		};
 	}
 }

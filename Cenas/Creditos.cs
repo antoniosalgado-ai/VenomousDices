@@ -8,7 +8,7 @@ public partial class Creditos : Control
 		var sair = GetNode<Button>("TextureRect/sairBtn");
 		sair.Pressed += () =>
 		{
-			GetTree().ChangeSceneToFile("res://telaInicial.tscn");
+			GetTree().ChangeSceneToFile("res://Cenas/telaInicial.tscn");
 		};
 	}
 }

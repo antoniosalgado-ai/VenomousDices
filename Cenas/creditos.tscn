@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cxubwybreurv6"]
 
-[ext_resource type="Script" uid="uid://cknvokt0l1q4x" path="res://Creditos.cs" id="1_7flbs"]
-[ext_resource type="Texture2D" uid="uid://kefioheje50l" path="res://spritestemp/download.png" id="2_alf7g"]
+[ext_resource type="Script" uid="uid://cknvokt0l1q4x" path="res://Cenas/Creditos.cs" id="1_7flbs"]
+[ext_resource type="Texture2D" uid="uid://blmbajimtqqn2" path="res://Sprites temp/fundoverde.png" id="2_ct8y5"]
 
 [node name="Control" type="Control" unique_id=839291906]
 layout_mode = 3
@@ -10,13 +10,15 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("1_7flbs")
 
 [node name="TextureRect" type="TextureRect" parent="." unique_id=2106251196]
 layout_mode = 0
 offset_right = 1153.0
 offset_bottom = 653.0
-texture = ExtResource("2_alf7g")
+mouse_filter = 2
+texture = ExtResource("2_ct8y5")
 
 [node name="sairBtn" type="Button" parent="TextureRect" unique_id=1468447219]
 layout_mode = 0

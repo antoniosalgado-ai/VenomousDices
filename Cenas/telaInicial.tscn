@@ -1,11 +1,11 @@
 [gd_scene format=3 uid="uid://sjoefumfmm6h"]
 
-[ext_resource type="Script" uid="uid://djo2g6doyo5nx" path="res://TelaInicial.cs" id="1_0m7ol"]
-[ext_resource type="Texture2D" uid="uid://kefioheje50l" path="res://spritestemp/download.png" id="1_gfftd"]
-[ext_resource type="Texture2D" uid="uid://djikww5snl67v" path="res://spritestemp/comecar.png" id="2_suicj"]
-[ext_resource type="Texture2D" uid="uid://dkphshvhjawuo" path="res://spritestemp/CONFIG.png" id="3_0m7ol"]
-[ext_resource type="Texture2D" uid="uid://cehud25d7oekl" path="res://spritestemp/creditos.png" id="4_gea1i"]
-[ext_resource type="Texture2D" uid="uid://i1fe80e7dank" path="res://spritestemp/SAIR.png" id="5_caubg"]
+[ext_resource type="Script" uid="uid://djo2g6doyo5nx" path="res://Cenas/TelaInicial.cs" id="1_glnh4"]
+[ext_resource type="Texture2D" uid="uid://blmbajimtqqn2" path="res://Sprites temp/fundoverde.png" id="2_4bxp3"]
+[ext_resource type="Texture2D" uid="uid://dwhhwmt6nhqnr" path="res://Sprites temp/Começar.png" id="3_dl0f1"]
+[ext_resource type="Texture2D" uid="uid://30p1vk07c8vd" path="res://Sprites temp/CONFIG.png" id="4_m60q7"]
+[ext_resource type="Texture2D" uid="uid://b6gte0166vldk" path="res://Sprites temp/Créditos.png" id="5_whkfb"]
+[ext_resource type="Texture2D" uid="uid://bgwyqs331iftc" path="res://Sprites temp/SAIR.png" id="6_1ixvx"]
 
 [node name="Control" type="Control" unique_id=864353578]
 layout_mode = 3
@@ -14,14 +14,15 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_0m7ol")
+mouse_filter = 2
+script = ExtResource("1_glnh4")
 
 [node name="TextureRect" type="TextureRect" parent="." unique_id=1177281671]
 layout_mode = 0
 offset_right = 1158.0
 offset_bottom = 653.0
 mouse_filter = 2
-texture = ExtResource("1_gfftd")
+texture = ExtResource("2_4bxp3")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1789247088]
 layout_mode = 1
@@ -50,16 +51,16 @@ theme_override_constants/separation = 25
 
 [node name="start_btn" type="TextureButton" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=1957976885]
 layout_mode = 2
-texture_normal = ExtResource("2_suicj")
+texture_normal = ExtResource("3_dl0f1")
 
 [node name="config_btn" type="TextureButton" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=1090439675]
 layout_mode = 2
-texture_normal = ExtResource("3_0m7ol")
+texture_normal = ExtResource("4_m60q7")
 
 [node name="creditos_btn" type="TextureButton" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=1062115209]
 layout_mode = 2
-texture_normal = ExtResource("4_gea1i")
+texture_normal = ExtResource("5_whkfb")
 
 [node name="quit_btn" type="TextureButton" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=699713326]
 layout_mode = 2
-texture_normal = ExtResource("5_caubg")
+texture_normal = ExtResource("6_1ixvx")
