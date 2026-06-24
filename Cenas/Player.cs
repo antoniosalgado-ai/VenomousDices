@@ -17,11 +17,11 @@ public partial class Player : CharacterBody2D
 		if (direction != Vector2.Zero)
 		{
 			Velocity= direction * Speed;
-			if (direction.X>0)
+			if (direction.X<0)
 			{
 				animatedSprite.FlipH= false;
 			}
-			else if (direction.X < 0)
+			else if (direction.X > 0)
 			{
 				animatedSprite.FlipH = true;
 			}
