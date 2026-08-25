@@ -4,8 +4,8 @@
 [ext_resource type="Texture2D" uid="uid://b1ip6ts0a2vfm" path="res://Sprites/Personagem/PersonagemIdle.png" id="2_pmvhq"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_5p0qj"]
-radius = 64.0
-height = 180.0
+radius = 8.0
+height = 36.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_iersn"]
 atlas = ExtResource("2_pmvhq")
@@ -81,5 +81,6 @@ shape = SubResource("CapsuleShape2D_5p0qj")
 zoom = Vector2(2, 2)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=369802474]
+position = Vector2(0, -3)
 sprite_frames = SubResource("SpriteFrames_2enhl")
 autoplay = "default"
