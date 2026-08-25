@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://bewjsvanmlp3a"]
+
+[ext_resource type="Texture2D" uid="uid://bgxpob1yxxf4t" path="res://Sprites/bala.png" id="1_wr052"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_wr052"]
+radius = 4.0
+height = 8.0
+
+[node name="Tiro" type="Area2D" unique_id=523062492]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=677415317]
+position = Vector2(577, 341)
+texture = ExtResource("1_wr052")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Sprite2D" unique_id=1030407343]
+shape = SubResource("CapsuleShape2D_wr052")
