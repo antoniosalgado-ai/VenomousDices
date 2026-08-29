@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://flo4kg6b8hxd"]
 
 [ext_resource type="Script" uid="uid://b11v565gin5cu" path="res://Cenas/Player.cs" id="1_pmvhq"]
+[ext_resource type="PackedScene" uid="uid://bewjsvanmlp3a" path="res://Cenas/Bullet.tscn" id="2_iersn"]
 [ext_resource type="Texture2D" uid="uid://b1ip6ts0a2vfm" path="res://Sprites/Personagem/PersonagemIdle.png" id="2_pmvhq"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_5p0qj"]
@@ -72,7 +73,10 @@ animations = [{
 }]
 
 [node name="Player" type="CharacterBody2D" unique_id=1595368593]
+collision_layer = 0
+collision_mask = 0
 script = ExtResource("1_pmvhq")
+BulletScene = ExtResource("2_iersn")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=867940227]
 shape = SubResource("CapsuleShape2D_5p0qj")
@@ -84,3 +88,6 @@ zoom = Vector2(2, 2)
 position = Vector2(0, -3)
 sprite_frames = SubResource("SpriteFrames_2enhl")
 autoplay = "default"
+
+[node name="Muzzle" type="Marker2D" parent="." unique_id=968624721]
+position = Vector2(13, 0)
