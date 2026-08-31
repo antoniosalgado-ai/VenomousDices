@@ -4,7 +4,7 @@ extends Node2D
 	preload("res://Cenas/Enemy.tscn"),
 ]
 
-@export var spawn_interval: float = 1.0
+@export var spawn_interval: float = 3.0
 
 var timer: Timer
 

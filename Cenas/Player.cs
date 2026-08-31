@@ -5,16 +5,28 @@ public partial class Player : CharacterBody2D
 {
 	[Export] public float Speed { get; set; } = 150.0f;
 	[Export] public PackedScene BulletScene { get; set; }
+	
+	// Configurações de Vida e UI
+	[Export] public int MaxHealth { get; set; } = 50;
+	public int CurrentHealth { get; private set; }
+	[Export] public float DamageCooldown { get; set; } = 2.0f;
+	
+	// Referência para a barra de vida na interface
+	[Export] public ProgressBar HealthBar { get; set; }
 
+	private bool _canTakeDamage = true;
 	private AnimatedSprite2D _animatedSprite;
 	private Marker2D _muzzle;
 
 	public override void _Ready()
 	{
 		AddToGroup("player");
+		CurrentHealth = MaxHealth;
 
 		_animatedSprite = GetNodeOrNull<AnimatedSprite2D>("AnimatedSprite2D");
 		_muzzle = GetNodeOrNull<Marker2D>("Muzzle");
+
+		UpdateHealthBar();
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -51,19 +63,51 @@ public partial class Player : CharacterBody2D
 		}
 	}
 
-	private void Shoot()
+	public void TakeDamage(int amount)
 	{
-		if (BulletScene == null)
+		if (!_canTakeDamage) return;
+
+		CurrentHealth -= amount;
+		UpdateHealthBar();
+		GD.Print($"DANO! Vida restante do Player: {CurrentHealth}/{MaxHealth}");
+
+		if (CurrentHealth <= 0)
 		{
-			GD.Print("ERRO: BulletScene está nula no Inspector do Player!");
+			Die();
 			return;
 		}
 
-		if (_muzzle == null)
+		StartDamageCooldown();
+	}
+
+	private async void StartDamageCooldown()
+	{
+		_canTakeDamage = false;
+
+		// Aguarda os 2 segundos de cooldown mantendo a aparência normal do personagem
+		await ToSignal(GetTree().CreateTimer(DamageCooldown), SceneTreeTimer.SignalName.Timeout);
+
+		_canTakeDamage = true;
+	}
+
+	private void UpdateHealthBar()
+	{
+		if (HealthBar != null)
 		{
-			GD.Print("ERRO: Nó Muzzle não foi encontrado!");
-			return;
+			HealthBar.MaxValue = MaxHealth;
+			HealthBar.Value = CurrentHealth;
 		}
+	}
+
+	private void Die()
+	{
+		GD.Print("GAME OVER! O jogador foi derrotado.");
+		GetTree().ReloadCurrentScene();
+	}
+
+	private void Shoot()
+	{
+		if (BulletScene == null || _muzzle == null) return;
 
 		Node bulletInstance = BulletScene.Instantiate();
 		
