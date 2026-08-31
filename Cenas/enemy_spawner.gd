@@ -4,11 +4,26 @@ extends Node2D
 	preload("res://Cenas/Enemy.tscn"),
 ]
 
-@export var spawn_interval: float = 3.0
+@export var spawn_interval: float = 2.5
+@export var max_enemies: int = 20
+@export var next_scene_path: String = "res://Cenas/fase2.tscn"
 
+# Referência para a barra de abates no Inspector
+@export var kill_bar: ProgressBar
+
+var enemies_spawned: int = 0
+var enemies_killed: int = 0
 var timer: Timer
 
 func _ready() -> void:
+	add_to_group("spawner")
+	
+	# Se não foi arrastada pelo Inspector, busca automaticamente pelo nome ProgressBar2
+	if not kill_bar:
+		kill_bar = get_tree().current_scene.find_child("ProgressBar2", true, false) as ProgressBar
+
+	update_kill_bar()
+	
 	timer = Timer.new()
 	timer.wait_time = spawn_interval
 	timer.autostart = true
@@ -20,6 +35,10 @@ func _on_spawn_timeout() -> void:
 	spawn_enemy()
 
 func spawn_enemy() -> void:
+	if enemies_spawned >= max_enemies:
+		timer.stop()
+		return
+		
 	if enemy_scenes.is_empty():
 		return
 		
@@ -33,9 +52,26 @@ func spawn_enemy() -> void:
 	
 	if chosen_enemy_scene and random_point:
 		var enemy = chosen_enemy_scene.instantiate() as Node2D
-		
-		# 1º Adiciona o nó na cena primeiro
 		get_tree().current_scene.add_child(enemy)
-		
-		# 2º Define a posição global depois de entrar na árvore (evita nascer fora da tela)
 		enemy.global_position = random_point.global_position
+		
+		enemies_spawned += 1
+		print("Inimigo Spawnado: ", enemies_spawned, "/", max_enemies)
+
+func on_enemy_killed() -> void:
+	enemies_killed += 1
+	update_kill_bar()
+	print("Abates: ", enemies_killed, "/", max_enemies)
+	
+	if enemies_killed >= max_enemies:
+		print("Fase Concluída! Carregando próxima fase...")
+		if ResourceLoader.exists(next_scene_path):
+			get_tree().change_scene_to_file(next_scene_path)
+		else:
+			print("Aviso: Cena '", next_scene_path, "' não foi encontrada. Reiniciando a fase atual.")
+			get_tree().reload_current_scene()
+
+func update_kill_bar() -> void:
+	if kill_bar:
+		kill_bar.max_value = max_enemies
+		kill_bar.value = enemies_killed

@@ -112,8 +112,9 @@ position = Vector2(332, 3)
 position = Vector2(-1, -19)
 shape = SubResource("RectangleShape2D_wv8n6")
 
-[node name="EnemySpawner" type="Node2D" parent="." unique_id=1892334886]
+[node name="EnemySpawner" type="Node2D" parent="." unique_id=1892334886 node_paths=PackedStringArray("kill_bar")]
 script = ExtResource("3_1j40s")
+kill_bar = NodePath("../CanvasLayer/ProgressBar2")
 
 [node name="SpawnPoints" type="Node2D" parent="." unique_id=514310604]
 
@@ -144,4 +145,13 @@ offset_bottom = 27.0
 size_flags_horizontal = 0
 max_value = 50.0
 value = 50.0
+fill_mode = 2
+
+[node name="ProgressBar2" type="ProgressBar" parent="CanvasLayer" unique_id=843684467]
+z_index = 1
+offset_top = 28.0
+offset_right = 50.0
+offset_bottom = 55.0
+size_flags_horizontal = 0
+max_value = 20.0
 fill_mode = 2

@@ -33,17 +33,21 @@ public partial class Player : CharacterBody2D
 	{
 		Vector2 direction = Input.GetVector("ui_left", "ui_right", "ui_up", "ui_down");
 		
+		// Verifica se a tecla Shift está pressionada
+		bool isHoldingShift = Input.IsKeyPressed(Key.Shift);
+
 		if (direction != Vector2.Zero)
 		{
-			Velocity = direction * Speed;
+			// Se estiver segurando Shift, o personagem não se move, mas continua mudando de direção
+			Velocity = isHoldingShift ? Vector2.Zero : direction * Speed;
 			
-			// Gira o Muzzle para a direção exata do movimento (8 direções)
+			// Gira o Muzzle para a direção exata do movimento/mira
 			if (_muzzle != null)
 			{
 				_muzzle.Rotation = direction.Angle();
 			}
 
-			// Controla o flip da imagem do personagem (esquerda/direita)
+			// Controla o flip da imagem do personagem
 			if (_animatedSprite != null)
 			{
 				if (direction.X < 0) _animatedSprite.FlipH = false;

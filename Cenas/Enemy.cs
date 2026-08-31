@@ -59,6 +59,8 @@ public partial class Enemy : CharacterBody2D
 	private void Die()
 	{
 		GD.Print("Inimigo derrotado!");
+		// Envia a mensagem para o script GDScript do Spawner
+		GetTree().CallGroup("spawner", "on_enemy_killed");
 		QueueFree();
 	}
 }
