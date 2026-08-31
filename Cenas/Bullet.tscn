@@ -9,8 +9,6 @@ height = 8.0
 
 [node name="Bullet" type="Area2D" unique_id=523062492]
 z_index = 100
-collision_layer = 0
-collision_mask = 0
 script = ExtResource("1_8c6df")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=677415317]

@@ -6,12 +6,11 @@ public partial class Player : CharacterBody2D
 	[Export] public float Speed { get; set; } = 150.0f;
 	[Export] public PackedScene BulletScene { get; set; }
 	
-	// Configurações de Vida e UI
+	// Configurações de Vida
 	[Export] public int MaxHealth { get; set; } = 50;
 	public int CurrentHealth { get; private set; }
 	[Export] public float DamageCooldown { get; set; } = 2.0f;
 	
-	// Referência para a barra de vida na interface
 	[Export] public ProgressBar HealthBar { get; set; }
 
 	private bool _canTakeDamage = true;
@@ -25,6 +24,7 @@ public partial class Player : CharacterBody2D
 
 		_animatedSprite = GetNodeOrNull<AnimatedSprite2D>("AnimatedSprite2D");
 		_muzzle = GetNodeOrNull<Marker2D>("Muzzle");
+		if (HealthBar == null) HealthBar = GetNodeOrNull<ProgressBar>("ProgressBar");
 
 		UpdateHealthBar();
 	}
@@ -36,18 +36,18 @@ public partial class Player : CharacterBody2D
 		if (direction != Vector2.Zero)
 		{
 			Velocity = direction * Speed;
+			
+			// Gira o Muzzle para a direção exata do movimento (8 direções)
+			if (_muzzle != null)
+			{
+				_muzzle.Rotation = direction.Angle();
+			}
+
+			// Controla o flip da imagem do personagem (esquerda/direita)
 			if (_animatedSprite != null)
 			{
-				if (direction.X < 0)
-				{
-					_animatedSprite.FlipH = false;
-					if (_muzzle != null) _muzzle.RotationDegrees = 180f;
-				}
-				else if (direction.X > 0)
-				{
-					_animatedSprite.FlipH = true;
-					if (_muzzle != null) _muzzle.RotationDegrees = 0f;
-				}
+				if (direction.X < 0) _animatedSprite.FlipH = false;
+				else if (direction.X > 0) _animatedSprite.FlipH = true;
 			}
 		}
 		else
@@ -69,7 +69,7 @@ public partial class Player : CharacterBody2D
 
 		CurrentHealth -= amount;
 		UpdateHealthBar();
-		GD.Print($"DANO! Vida restante do Player: {CurrentHealth}/{MaxHealth}");
+		GD.Print($"DANO! Vida do Player: {CurrentHealth}/{MaxHealth}");
 
 		if (CurrentHealth <= 0)
 		{
@@ -83,10 +83,7 @@ public partial class Player : CharacterBody2D
 	private async void StartDamageCooldown()
 	{
 		_canTakeDamage = false;
-
-		// Aguarda os 2 segundos de cooldown mantendo a aparência normal do personagem
 		await ToSignal(GetTree().CreateTimer(DamageCooldown), SceneTreeTimer.SignalName.Timeout);
-
 		_canTakeDamage = true;
 	}
 
@@ -101,7 +98,7 @@ public partial class Player : CharacterBody2D
 
 	private void Die()
 	{
-		GD.Print("GAME OVER! O jogador foi derrotado.");
+		GD.Print("GAME OVER!");
 		GetTree().ReloadCurrentScene();
 	}
 
@@ -109,14 +106,11 @@ public partial class Player : CharacterBody2D
 	{
 		if (BulletScene == null || _muzzle == null) return;
 
-		Node bulletInstance = BulletScene.Instantiate();
-		
-		if (bulletInstance is Node2D bullet2D)
-		{
-			bullet2D.GlobalPosition = _muzzle.GlobalPosition;
-			bullet2D.GlobalRotation = _muzzle.GlobalRotation;
-		}
+		Node2D bulletInstance = BulletScene.Instantiate<Node2D>();
 
 		GetTree().CurrentScene.AddChild(bulletInstance);
+
+		bulletInstance.GlobalPosition = _muzzle.GlobalPosition;
+		bulletInstance.GlobalRotation = _muzzle.GlobalRotation;
 	}
 }

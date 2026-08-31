@@ -5,6 +5,9 @@ public partial class Enemy : CharacterBody2D
 {
 	[Export] public float Speed { get; set; } = 100.0f;
 	[Export] public int DamageAmount { get; set; } = 10;
+	
+	// Vida do Inimigo (2 acertos para morrer)
+	[Export] public int Health { get; set; } = 2;
 
 	private Node2D _player;
 
@@ -27,7 +30,6 @@ public partial class Enemy : CharacterBody2D
 		
 		MoveAndSlide();
 
-		// Verifica colisões físicas após se mover
 		for (int i = 0; i < GetSlideCollisionCount(); i++)
 		{
 			KinematicCollision2D collision = GetSlideCollision(i);
@@ -41,5 +43,22 @@ public partial class Enemy : CharacterBody2D
 	private void FindPlayer()
 	{
 		_player = GetTree().GetFirstNodeInGroup("player") as Node2D;
+	}
+
+	public void TakeDamage(int amount)
+	{
+		Health -= amount;
+		GD.Print($"Inimigo atingido! Vida restante: {Health}");
+
+		if (Health <= 0)
+		{
+			Die();
+		}
+	}
+
+	private void Die()
+	{
+		GD.Print("Inimigo derrotado!");
+		QueueFree();
 	}
 }
