@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://bkl2ie3vycrke"]
+
+[sub_resource type="CSharpScript" id="CSharpScript_8cq11"]
+script/source = "using Godot;
+using System;
+
+public partial class EnemySpawner : Node2D
+{
+	[Export] public PackedScene EnemyScene { get; set; }
+	[Export] public float SpawnDistance { get; set; } = 400.0f;
+
+	private Timer _timer;
+	private Node2D _player;
+
+	public override void _Ready()
+	{
+		_timer = GetNode<Timer>(\"Timer\");
+		_timer.Timeout += SpawnEnemy;
+		
+		_player = GetTree().GetFirstNodeInGroup(\"player\") as Node2D;
+	}
+
+	private void SpawnEnemy()
+	{
+		if (EnemyScene == null || _player == null) return;
+
+		Node2D enemyInstance = EnemyScene.Instantiate<Node2D>();
+
+		float randomAngle = (float)GD.RandRange(0, Mathf.Tau);
+		Vector2 offset = new Vector2(Mathf.Cos(randomAngle), Mathf.Sin(randomAngle)) * SpawnDistance;
+
+		enemyInstance.GlobalPosition = _player.GlobalPosition + offset;
+		GetTree().CurrentScene.AddChild(enemyInstance);
+	}
+}
+"
+
+[node name="EnemySpawner" type="Node2D" unique_id=739864877]
+script = SubResource("CSharpScript_8cq11")
+
+[node name="Timer" type="Timer" parent="." unique_id=132217405]
+wait_time = 2.0
+autostart = true

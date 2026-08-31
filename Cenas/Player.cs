@@ -11,9 +11,10 @@ public partial class Player : CharacterBody2D
 
 	public override void _Ready()
 	{
-		_animatedSprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
-		//_animatedSprite.Play("idle");
-		_muzzle = GetNode<Marker2D>("Muzzle");
+		AddToGroup("player");
+
+		_animatedSprite = GetNodeOrNull<AnimatedSprite2D>("AnimatedSprite2D");
+		_muzzle = GetNodeOrNull<Marker2D>("Muzzle");
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -23,15 +24,18 @@ public partial class Player : CharacterBody2D
 		if (direction != Vector2.Zero)
 		{
 			Velocity = direction * Speed;
-			if (direction.X < 0)
+			if (_animatedSprite != null)
 			{
-				_animatedSprite.FlipH = false;
-				_muzzle.RotationDegrees = 180f;
-			}
-			else if (direction.X > 0)
-			{
-				_animatedSprite.FlipH = true;
-				_muzzle.RotationDegrees = 0f;
+				if (direction.X < 0)
+				{
+					_animatedSprite.FlipH = false;
+					if (_muzzle != null) _muzzle.RotationDegrees = 180f;
+				}
+				else if (direction.X > 0)
+				{
+					_animatedSprite.FlipH = true;
+					if (_muzzle != null) _muzzle.RotationDegrees = 0f;
+				}
 			}
 		}
 		else
@@ -41,7 +45,6 @@ public partial class Player : CharacterBody2D
 
 		MoveAndSlide();
 
-		// Detecta a ação de atirar a cada quadro da física
 		if (Input.IsActionJustPressed("shoot"))
 		{
 			Shoot();
@@ -56,10 +59,20 @@ public partial class Player : CharacterBody2D
 			return;
 		}
 
-		GD.Print("Tiro disparado com sucesso!");
+		if (_muzzle == null)
+		{
+			GD.Print("ERRO: Nó Muzzle não foi encontrado!");
+			return;
+		}
 
-		Bullet bulletInstance = BulletScene.Instantiate<Bullet>();
-		bulletInstance.GlobalTransform = _muzzle.GlobalTransform;
+		Node bulletInstance = BulletScene.Instantiate();
+		
+		if (bulletInstance is Node2D bullet2D)
+		{
+			bullet2D.GlobalPosition = _muzzle.GlobalPosition;
+			bullet2D.GlobalRotation = _muzzle.GlobalRotation;
+		}
+
 		GetTree().CurrentScene.AddChild(bulletInstance);
 	}
 }

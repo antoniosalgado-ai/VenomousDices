@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://dd1y5fm8f4km0"]
+
+[ext_resource type="Script" uid="uid://cqm5omab74bg1" path="res://Cenas/Enemy.cs" id="1_tp8xb"]
+[ext_resource type="Texture2D" uid="uid://blmbajimtqqn2" path="res://Sprites temp/fundoverde.png" id="2_coe7t"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_1ejt6"]
+radius = 12.0
+height = 24.0
+
+[node name="Enemy" type="CharacterBody2D" unique_id=2119722477 groups=["enemy"]]
+z_index = 5
+script = ExtResource("1_tp8xb")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1903560177]
+scale = Vector2(0.12837845, 0.11785564)
+texture = ExtResource("2_coe7t")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1727724829]
+shape = SubResource("CapsuleShape2D_1ejt6")

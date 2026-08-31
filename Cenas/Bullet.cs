@@ -12,8 +12,8 @@ public partial class Bullet : Area2D
 		Position += Transform.X * Speed * (float)delta;
 	}
 	private void OnBodyEntered(Node2D body)
-{
-	GD.Print("Bala colidiu com: " + body.Name);
-	// QueueFree(); <--- Coloque as duas barras aqui temporariamente!
-}
+	{
+		GD.Print("Bala colidiu com: " + body.Name);
+		QueueFree();
+	}
 }

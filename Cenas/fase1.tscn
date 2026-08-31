@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://flo4kg6b8hxd" path="res://Cenas/player.tscn" id="1_xt5og"]
 [ext_resource type="Texture2D" uid="uid://d4lqecow3paei" path="res://Sprites/TileMaps/Sala1Tiles/Tile (1).png" id="2_42rfr"]
+[ext_resource type="Script" uid="uid://b5ywjpawn6n2k" path="res://Cenas/enemy_spawner.gd" id="3_1j40s"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1j40s"]
 texture = ExtResource("2_42rfr")
@@ -109,3 +110,26 @@ position = Vector2(332, 3)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Borda/StaticBody2D4" unique_id=105107685]
 position = Vector2(-1, -19)
 shape = SubResource("RectangleShape2D_wv8n6")
+
+[node name="EnemySpawner" type="Node2D" parent="." unique_id=1892334886]
+script = ExtResource("3_1j40s")
+
+[node name="SpawnPoints" type="Node2D" parent="." unique_id=514310604]
+
+[node name="Marker2D" type="Marker2D" parent="SpawnPoints" unique_id=750709709 groups=["spawn_points"]]
+position = Vector2(-298, -156)
+
+[node name="Marker2D2" type="Marker2D" parent="SpawnPoints" unique_id=830675461 groups=["spawn_points"]]
+position = Vector2(-2, -154)
+
+[node name="Marker2D3" type="Marker2D" parent="SpawnPoints" unique_id=1108957259 groups=["spawn_points"]]
+position = Vector2(288, -151)
+
+[node name="Marker2D4" type="Marker2D" parent="SpawnPoints" unique_id=790175013 groups=["spawn_points"]]
+position = Vector2(287, 124)
+
+[node name="Marker2D5" type="Marker2D" parent="SpawnPoints" unique_id=1603055707 groups=["spawn_points"]]
+position = Vector2(-260, 119)
+
+[node name="Marker2D6" type="Marker2D" parent="SpawnPoints" unique_id=522688312 groups=["spawn_points"]]
+position = Vector2(6, 122)

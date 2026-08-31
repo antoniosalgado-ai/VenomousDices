@@ -15,9 +15,7 @@ script = ExtResource("1_8c6df")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=677415317]
 z_index = 100
-position = Vector2(577, 341)
 texture = ExtResource("2_awp3w")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1030407343]
-position = Vector2(577, 341)
 shape = SubResource("CapsuleShape2D_wr052")
