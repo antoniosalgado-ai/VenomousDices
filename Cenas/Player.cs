@@ -31,28 +31,13 @@ public partial class Player : CharacterBody2D
 
 	public override void _PhysicsProcess(double delta)
 	{
+		// 1. Movimentação (WASD / Setas + Trava do Shift)
 		Vector2 direction = Input.GetVector("ui_left", "ui_right", "ui_up", "ui_down");
-		
-		// Verifica se a tecla Shift está pressionada
 		bool isHoldingShift = Input.IsKeyPressed(Key.Shift);
 
-		if (direction != Vector2.Zero)
+		if (direction != Vector2.Zero && !isHoldingShift)
 		{
-			// Se estiver segurando Shift, o personagem não se move, mas continua mudando de direção
-			Velocity = isHoldingShift ? Vector2.Zero : direction * Speed;
-			
-			// Gira o Muzzle para a direção exata do movimento/mira
-			if (_muzzle != null)
-			{
-				_muzzle.Rotation = direction.Angle();
-			}
-
-			// Controla o flip da imagem do personagem
-			if (_animatedSprite != null)
-			{
-				if (direction.X < 0) _animatedSprite.FlipH = false;
-				else if (direction.X > 0) _animatedSprite.FlipH = true;
-			}
+			Velocity = direction * Speed;
 		}
 		else
 		{
@@ -61,6 +46,28 @@ public partial class Player : CharacterBody2D
 
 		MoveAndSlide();
 
+		// 2. Aponta o Muzzle para a posição do cursor do mouse (Mira 360°)
+		Vector2 mousePosition = GetGlobalMousePosition();
+
+		if (_muzzle != null)
+		{
+			_muzzle.LookAt(mousePosition);
+		}
+
+		// 3. Vira o sprite do personagem dependendo se o mouse está à esquerda ou à direita
+		if (_animatedSprite != null)
+		{
+			if (mousePosition.X < GlobalPosition.X)
+			{
+				_animatedSprite.FlipH = false;
+			}
+			else if (mousePosition.X > GlobalPosition.X)
+			{
+				_animatedSprite.FlipH = true;
+			}
+		}
+
+		// 4. Disparo
 		if (Input.IsActionJustPressed("shoot"))
 		{
 			Shoot();
