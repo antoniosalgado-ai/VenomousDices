@@ -4,7 +4,7 @@ extends Node2D
 	preload("res://Cenas/Enemy.tscn"),
 ]
 
-@export var spawn_interval: float = 2.5
+@export var spawn_interval: float = 2.0
 @export var max_enemies: int = 20
 @export var next_scene_path: String = "res://Cenas/fase2.tscn"
 

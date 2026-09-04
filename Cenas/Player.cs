@@ -6,6 +6,9 @@ public partial class Player : CharacterBody2D
 	[Export] public float Speed { get; set; } = 150.0f;
 	[Export] public PackedScene BulletScene { get; set; }
 	
+	[Export] public float SecondsPerAttack { get; set; } = 0.5f; 
+	private bool _canShoot = true;
+
 	// Configurações de Vida
 	[Export] public int MaxHealth { get; set; } = 50;
 	public int CurrentHealth { get; private set; }
@@ -46,7 +49,7 @@ public partial class Player : CharacterBody2D
 
 		MoveAndSlide();
 
-		// 2. Aponta o Muzzle para a posição do cursor do mouse (Mira 360°)
+		// 2. Mira em 360° em direção ao cursor do rato
 		Vector2 mousePosition = GetGlobalMousePosition();
 
 		if (_muzzle != null)
@@ -54,7 +57,7 @@ public partial class Player : CharacterBody2D
 			_muzzle.LookAt(mousePosition);
 		}
 
-		// 3. Vira o sprite do personagem dependendo se o mouse está à esquerda ou à direita
+		// 3. Inverter o sprite de acordo com o lado do rato
 		if (_animatedSprite != null)
 		{
 			if (mousePosition.X < GlobalPosition.X)
@@ -67,8 +70,8 @@ public partial class Player : CharacterBody2D
 			}
 		}
 
-		// 4. Disparo
-		if (Input.IsActionJustPressed("shoot"))
+		// 4. Disparo (Suporta manter o botão pressionado respeitando o SecondsPerAttack)
+		if (Input.IsActionPressed("shoot"))
 		{
 			Shoot();
 		}
@@ -113,15 +116,21 @@ public partial class Player : CharacterBody2D
 		GetTree().ReloadCurrentScene();
 	}
 
-	private void Shoot()
+	private async void Shoot()
 	{
-		if (BulletScene == null || _muzzle == null) return;
+		// Se não puder atirar ou faltar a cena do tiro, ignora
+		if (!_canShoot || BulletScene == null || _muzzle == null) return;
+
+		_canShoot = false; // Trava o disparo temporariamente
 
 		Node2D bulletInstance = BulletScene.Instantiate<Node2D>();
-
 		GetTree().CurrentScene.AddChild(bulletInstance);
 
 		bulletInstance.GlobalPosition = _muzzle.GlobalPosition;
 		bulletInstance.GlobalRotation = _muzzle.GlobalRotation;
+
+		// Aguarda o tempo definido em SecondsPerAttack para libertar o próximo tiro
+		await ToSignal(GetTree().CreateTimer(SecondsPerAttack), SceneTreeTimer.SignalName.Timeout);
+		_canShoot = true;
 	}
 }

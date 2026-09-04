@@ -3,7 +3,7 @@ using System;
 
 public partial class Enemy : CharacterBody2D
 {
-	[Export] public float Speed { get; set; } = 100.0f;
+	[Export] public float Speed { get; set; } = 130.0f;
 	[Export] public int DamageAmount { get; set; } = 10;
 	
 	// Vida do Inimigo (2 acertos para morrer)
