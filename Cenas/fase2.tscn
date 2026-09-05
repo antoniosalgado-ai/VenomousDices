@@ -1,3 +1,32 @@
 [gd_scene format=3 uid="uid://deqrujd52g48r"]
 
+[ext_resource type="Texture2D" uid="uid://drwcllrjuinii" path="res://Sprites/TileMaps/Sala2/sala2tapete.png" id="1_2wxla"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_fp3bc"]
+texture = ExtResource("1_2wxla")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+9:0/0 = 0
+10:0/0 = 0
+11:0/0 = 0
+12:0/0 = 0
+13:0/0 = 0
+14:0/0 = 0
+15:0/0 = 0
+16:0/0 = 0
+17:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_dikt8"]
+sources/0 = SubResource("TileSetAtlasSource_fp3bc")
+
 [node name="fase2" type="Node2D" unique_id=1502743200]
+
+[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1994659228]
+tile_set = SubResource("TileSet_dikt8")

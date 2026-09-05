@@ -9,11 +9,32 @@ public partial class Enemy : CharacterBody2D
 	// Vida do Inimigo (2 acertos para morrer)
 	[Export] public int Health { get; set; } = 2;
 
+	// Nome da animação criada no SpriteFrames (ex: "default", "walk", "andar")
+	[Export] public string AnimationName { get; set; } = "default";
+
 	private Node2D _player;
+	private AnimatedSprite2D _animatedSprite;
 
 	public override void _Ready()
 	{
 		AddToGroup("inimigos");
+		
+		// Busca o nó de animação
+		_animatedSprite = GetNodeOrNull<AnimatedSprite2D>("AnimatedSprite2D");
+
+		// Executa a animação ao nascer
+		if (_animatedSprite != null)
+		{
+			if (_animatedSprite.SpriteFrames != null && _animatedSprite.SpriteFrames.HasAnimation(AnimationName))
+			{
+				_animatedSprite.Play(AnimationName);
+			}
+			else
+			{
+				_animatedSprite.Play();
+			}
+		}
+
 		FindPlayer();
 	}
 
@@ -27,6 +48,19 @@ public partial class Enemy : CharacterBody2D
 
 		Vector2 direction = (_player.GlobalPosition - GlobalPosition).Normalized();
 		Velocity = direction * Speed;
+
+		// Atualiza o flip do sprite para olhar na direção em que se move (esquerda/direita)
+		if (_animatedSprite != null && direction != Vector2.Zero)
+		{
+			if (direction.X < 0)
+			{
+				_animatedSprite.FlipH = false; // Altere para true caso seu sprite base olhe para a direita
+			}
+			else if (direction.X > 0)
+			{
+				_animatedSprite.FlipH = true;
+			}
+		}
 		
 		MoveAndSlide();
 
