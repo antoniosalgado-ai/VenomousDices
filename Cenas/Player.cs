@@ -9,6 +9,17 @@ public partial class Player : CharacterBody2D
 	[Export] public float SecondsPerAttack { get; set; } = 0.5f; 
 	private bool _canShoot = true;
 
+	// Configurações do Dash (Esquiva)
+	[Export] public float DashSpeed { get; set; } = 500.0f;      // Velocidade durante o impulso
+	[Export] public float DashDuration { get; set; } = 0.15f;    // Tempo em segundos que o dash dura
+	[Export] public float DashCooldown { get; set; } = 5.0f;     // Tempo de recarga
+	[Export] public ProgressBar DashBar { get; set; }            // Referência para a ProgressBar3
+
+	private bool _isDashing = false;
+	private bool _canDash = true;
+	private float _dashCooldownTimer = 0.0f;
+	private Vector2 _dashDirection = Vector2.Zero;
+
 	// Configurações de Vida
 	[Export] public int MaxHealth { get; set; } = 50;
 	public int CurrentHealth { get; private set; }
@@ -29,11 +40,33 @@ public partial class Player : CharacterBody2D
 		_muzzle = GetNodeOrNull<Marker2D>("Muzzle");
 		if (HealthBar == null) HealthBar = GetNodeOrNull<ProgressBar>("ProgressBar");
 
+		// Busca automática da ProgressBar3 para o Dash
+		if (DashBar == null)
+		{
+			DashBar = GetNodeOrNull<ProgressBar>("DashBar");
+			if (DashBar == null && GetTree().CurrentScene != null)
+			{
+				DashBar = GetTree().CurrentScene.FindChild("ProgressBar3", true, false) as ProgressBar;
+			}
+		}
+
 		UpdateHealthBar();
+		InitDashBar();
 	}
 
 	public override void _PhysicsProcess(double delta)
 	{
+		// Atualiza o tempo de recarga e o preenchimento da barra do Dash
+		UpdateDashCooldown((float)delta);
+
+		// Se estiver executando o Dash, aplica o impulso rápido e ignora os movimentos normais
+		if (_isDashing)
+		{
+			Velocity = _dashDirection * DashSpeed;
+			MoveAndSlide();
+			return;
+		}
+
 		// 1. Movimentação (WASD / Setas + Trava do Shift)
 		Vector2 direction = Input.GetVector("ui_left", "ui_right", "ui_up", "ui_down");
 		bool isHoldingShift = Input.IsKeyPressed(Key.Shift);
@@ -48,6 +81,20 @@ public partial class Player : CharacterBody2D
 		}
 
 		MoveAndSlide();
+
+		// Ativação do Dash (Tecla Espaço)
+		if (Input.IsKeyPressed(Key.Space) && _canDash)
+		{
+			// Se estiver andando, dá o dash na direção do movimento; se estiver parado/Shift, dá na direção do mouse
+			Vector2 targetDashDir = direction != Vector2.Zero 
+				? direction 
+				: (GetGlobalMousePosition() - GlobalPosition).Normalized();
+
+			if (targetDashDir != Vector2.Zero)
+			{
+				StartDash(targetDashDir);
+			}
+		}
 
 		// 2. Mira em 360° em direção ao cursor do rato
 		Vector2 mousePosition = GetGlobalMousePosition();
@@ -74,6 +121,49 @@ public partial class Player : CharacterBody2D
 		if (Input.IsActionPressed("shoot"))
 		{
 			Shoot();
+		}
+	}
+
+	private async void StartDash(Vector2 dir)
+	{
+		_isDashing = true;
+		_canDash = false;
+		_dashDirection = dir;
+		_dashCooldownTimer = DashCooldown;
+
+		if (DashBar != null) DashBar.Value = 0;
+
+		await ToSignal(GetTree().CreateTimer(DashDuration), SceneTreeTimer.SignalName.Timeout);
+
+		_isDashing = false;
+	}
+
+	private void UpdateDashCooldown(float delta)
+	{
+		if (!_canDash)
+		{
+			_dashCooldownTimer -= delta;
+
+			// Enche a barra continuamente durante os 5 segundos
+			if (DashBar != null)
+			{
+				DashBar.Value = DashCooldown - Mathf.Max(_dashCooldownTimer, 0.0f);
+			}
+
+			if (_dashCooldownTimer <= 0)
+			{
+				_canDash = true;
+				if (DashBar != null) DashBar.Value = DashCooldown;
+			}
+		}
+	}
+
+	private void InitDashBar()
+	{
+		if (DashBar != null)
+		{
+			DashBar.MaxValue = DashCooldown;
+			DashBar.Value = DashCooldown;
 		}
 	}
 

@@ -1,8 +1,119 @@
 [gd_scene format=3 uid="uid://cbnnn4kxmrys0"]
 
+[ext_resource type="PackedScene" uid="uid://flo4kg6b8hxd" path="res://Cenas/player.tscn" id="1_vvbgh"]
+[ext_resource type="Script" uid="uid://b5ywjpawn6n2k" path="res://Cenas/enemy_spawner.gd" id="2_l1puh"]
+
 [sub_resource type="TileSet" id="TileSet_x1vod"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_v5mkw"]
+size = Vector2(671, 22)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mtrp5"]
+size = Vector2(41, 412)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kfqfi"]
+size = Vector2(613, 37)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2lct7"]
+size = Vector2(26, 367)
 
 [node name="Node2D" type="Node2D" unique_id=752197532]
 
-[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=481881575]
+[node name="Piso" type="TileMapLayer" parent="." unique_id=481881575]
 tile_set = SubResource("TileSet_x1vod")
+
+[node name="Borda" type="TileMapLayer" parent="." unique_id=1814314499]
+
+[node name="Player" parent="." unique_id=1595368593 node_paths=PackedStringArray("DashBar", "HealthBar") instance=ExtResource("1_vvbgh")]
+DashBar = NodePath("../CanvasLayer/ProgressBar3")
+HealthBar = NodePath("../CanvasLayer/ProgressBar")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=493159801]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1738903120]
+position = Vector2(-1.5, 174)
+shape = SubResource("RectangleShape2D_v5mkw")
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="." unique_id=1238329386]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D2" unique_id=1316754726]
+position = Vector2(-309.5, 8)
+shape = SubResource("RectangleShape2D_mtrp5")
+
+[node name="StaticBody2D3" type="StaticBody2D" parent="." unique_id=112938690]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D3" unique_id=649518828]
+position = Vector2(13.5, -181.5)
+shape = SubResource("RectangleShape2D_kfqfi")
+
+[node name="StaticBody2D4" type="StaticBody2D" parent="." unique_id=1737966238]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D4" unique_id=1981250038]
+position = Vector2(302, 4.5)
+shape = SubResource("RectangleShape2D_2lct7")
+
+[node name="EnemySpawner" type="Node2D" parent="." unique_id=1231404761 node_paths=PackedStringArray("kill_bar")]
+script = ExtResource("2_l1puh")
+enemy_1_count = 23
+enemy_2_count = 12
+spawn_interval = 1.7
+next_scene_path = "res://Cenas/fase4.tscn"
+kill_bar = NodePath("../CanvasLayer/ProgressBar2")
+
+[node name="SpawnPoints" type="Node2D" parent="." unique_id=672886392]
+
+[node name="Marker2D" type="Marker2D" parent="SpawnPoints" unique_id=39539219 groups=["spawn_points"]]
+position = Vector2(-267, -141)
+
+[node name="Marker2D2" type="Marker2D" parent="SpawnPoints" unique_id=233520007 groups=["spawn_points"]]
+position = Vector2(267, 5)
+
+[node name="Marker2D3" type="Marker2D" parent="SpawnPoints" unique_id=770533252 groups=["spawn_points"]]
+position = Vector2(271, -146)
+
+[node name="Marker2D4" type="Marker2D" parent="SpawnPoints" unique_id=1357723725 groups=["spawn_points"]]
+position = Vector2(272, 137)
+
+[node name="Marker2D5" type="Marker2D" parent="SpawnPoints" unique_id=91080143 groups=["spawn_points"]]
+position = Vector2(-267, 144)
+
+[node name="Marker2D6" type="Marker2D" parent="SpawnPoints" unique_id=1560041731 groups=["spawn_points"]]
+position = Vector2(-1, 139)
+
+[node name="Marker2D7" type="Marker2D" parent="SpawnPoints" unique_id=534827365 groups=["spawn_points"]]
+position = Vector2(-263, -1)
+
+[node name="Marker2D8" type="Marker2D" parent="SpawnPoints" unique_id=207255905 groups=["spawn_points"]]
+position = Vector2(-5, -141)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1311721866]
+
+[node name="ProgressBar" type="ProgressBar" parent="CanvasLayer" unique_id=1438184802]
+z_index = 1
+offset_right = 50.0
+offset_bottom = 27.0
+size_flags_horizontal = 0
+max_value = 50.0
+value = 50.0
+fill_mode = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="ProgressBar2" type="ProgressBar" parent="CanvasLayer" unique_id=1446781559]
+z_index = 1
+offset_top = 28.0
+offset_right = 50.0
+offset_bottom = 55.0
+size_flags_horizontal = 0
+max_value = 20.0
+fill_mode = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="ProgressBar3" type="ProgressBar" parent="CanvasLayer" unique_id=1868245997]
+z_index = 1
+offset_top = 56.0
+offset_right = 50.0
+offset_bottom = 83.0
+size_flags_horizontal = 0
+max_value = 20.0
+fill_mode = 2
+metadata/_edit_use_anchors_ = true
