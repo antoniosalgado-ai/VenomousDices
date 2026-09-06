@@ -115,6 +115,7 @@ shape = SubResource("RectangleShape2D_wv8n6")
 
 [node name="EnemySpawner" type="Node2D" parent="." unique_id=1892334886 node_paths=PackedStringArray("kill_bar")]
 script = ExtResource("3_1j40s")
+enemy_2_count = 0
 kill_bar = NodePath("../CanvasLayer/ProgressBar2")
 
 [node name="SpawnPoints" type="Node2D" parent="." unique_id=514310604]

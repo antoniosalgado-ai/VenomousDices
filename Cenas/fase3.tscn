@@ -53,8 +53,7 @@ shape = SubResource("RectangleShape2D_dpywe")
 
 [node name="EnemySpawner" type="Node2D" parent="." unique_id=939526590 node_paths=PackedStringArray("kill_bar")]
 script = ExtResource("2_m58aw")
-spawn_interval = 1.7
-max_enemies = 30
+spawn_interval = 1.8
 next_scene_path = "res://Cenas/fase4.tscn"
 kill_bar = NodePath("../CanvasLayer/ProgressBar2")
 

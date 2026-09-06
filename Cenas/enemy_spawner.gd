@@ -2,10 +2,14 @@ extends Node2D
 
 @export var enemy_scenes: Array[PackedScene] = [
 	preload("res://Cenas/Enemy.tscn"),
+	preload("res://Cenas/Enemy2.tscn")
 ]
 
+# Quantidades individuais para cada tipo de inimigo no Array acima
+@export var enemy_1_count: int = 20
+@export var enemy_2_count: int = 10
+
 @export var spawn_interval: float = 2.0
-@export var max_enemies: int = 20
 @export var next_scene_path: String = "res://Cenas/fase2.tscn"
 
 # Referência para a barra de abates no Inspector
@@ -13,10 +17,27 @@ extends Node2D
 
 var enemies_spawned: int = 0
 var enemies_killed: int = 0
+var max_enemies: int = 0
 var timer: Timer
+var spawn_queue: Array[PackedScene] = []
 
 func _ready() -> void:
 	add_to_group("spawner")
+	
+	# Monta a fila com a quantidade exata de cada inimigo
+	if enemy_scenes.size() > 0 and enemy_1_count > 0:
+		for i in range(enemy_1_count):
+			spawn_queue.append(enemy_scenes[0])
+			
+	if enemy_scenes.size() > 1 and enemy_2_count > 0:
+		for i in range(enemy_2_count):
+			spawn_queue.append(enemy_scenes[1])
+			
+	# Mistura a ordem de aparecimento
+	spawn_queue.shuffle()
+	
+	# Calcula o total máximo da fase automaticamente
+	max_enemies = spawn_queue.size()
 	
 	# Se não foi arrastada pelo Inspector, busca automaticamente pelo nome ProgressBar2
 	if not kill_bar:
@@ -35,11 +56,8 @@ func _on_spawn_timeout() -> void:
 	spawn_enemy()
 
 func spawn_enemy() -> void:
-	if enemies_spawned >= max_enemies:
+	if spawn_queue.is_empty():
 		timer.stop()
-		return
-		
-	if enemy_scenes.is_empty():
 		return
 		
 	var spawn_points = get_tree().get_nodes_in_group("spawn_points")
@@ -48,7 +66,9 @@ func spawn_enemy() -> void:
 		return
 		
 	var random_point = spawn_points.pick_random() as Node2D
-	var chosen_enemy_scene = enemy_scenes.pick_random()
+	
+	# Pega e remove o próximo inimigo da fila misturada
+	var chosen_enemy_scene = spawn_queue.pop_back()
 	
 	if chosen_enemy_scene and random_point:
 		var enemy = chosen_enemy_scene.instantiate() as Node2D
@@ -63,7 +83,7 @@ func on_enemy_killed() -> void:
 	update_kill_bar()
 	print("Abates: ", enemies_killed, "/", max_enemies)
 	
-	if enemies_killed >= max_enemies:
+	if enemies_killed >= max_enemies and max_enemies > 0:
 		print("Fase Concluída! Carregando próxima fase...")
 		if ResourceLoader.exists(next_scene_path):
 			get_tree().change_scene_to_file(next_scene_path)
